@@ -1,0 +1,247 @@
+{
+	"info": {
+		"_postman_id": "066d69fd-9d04-4073-a0ca-6b701811f2ca",
+		"name": "PyCharmCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8c0c0ed6-c206-4c88-9349-429e024e312b",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.test(\"access_token not empty\", function () {",
+							"    pm.expect(jsonData.access_token).not.eql(undefined);",
+							"});",
+							"",
+							"pm.test(\"refresh token not empty\", function () {",
+							"    pm.expect(jsonData.refresh_token).not.eql(undefined);",
+							"});",
+							"// set access token as environement variable",
+							"if (jsonData.access_token !== undefined) {",
+							"    postman.setEnvironmentVariable(\"access_token\", jsonData.access_token);",
+							"} else {",
+							"    postman.setEnvironmentVariable(\"access_token\", null);",
+							"}",
+							"// set refresh token as environement variable",
+							"if (jsonData.refresh_token !== undefined) {",
+							"    postman.setEnvironmentVariable(\"refresh_token\", jsonData.refresh_token);",
+							"} else {",
+							"    postman.setEnvironmentVariable(\"refresh_token\", null);",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\" : \"jose\",\n  \"password\" : \"1234\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refresh token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ad818ea6-8f79-436e-b756-ad878666ae9e",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.test(\"access_token not empty\", function () {",
+							"    pm.expect(jsonData.access_token).not.eql(undefined);",
+							"});",
+							"// set access token as environement variable",
+							"if (jsonData.access_token !== undefined) {",
+							"    postman.setEnvironmentVariable(\"access_token\", jsonData.access_token);",
+							"} else {",
+							"    postman.setEnvironmentVariable(\"access_token\", null);",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{refresh_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/refresh",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register a new user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e043fdde-fa7b-44e7-849f-3b34be791ff8",
+						"exec": [
+							"tests[\"Response time is less than 200ms\"] = responseTime < 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"User created successfully\"] = jsonData.message === \"User created successfully.\";",
+							"",
+							"tests[\"Content-Type is present in the response\"] = postman.getResponseHeader('Content-Type');",
+							"tests[\"Content-Type matched\"] = postman.getResponseHeader('Content-Type') === \"application/json\";",
+							"",
+							"postman.setEnvironmentVariable(\"token\", jsonData.message);",
+							"",
+							"postman.clearEnvironmentVariable(\"token\");",
+							"",
+							"postman.setEnvironmentVariable(\"token\", \"manas\");",
+							"",
+							"tests[\"Stats code is 200\"] = responseCode.code === 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"jose6\",\n\t\"password\": \"1234\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/user/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete user by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"jose\",\n\t\"password\": \"1234\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/user/2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dc763e9b-e6c7-4ff3-9766-637976a5c64b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/logout",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
