@@ -1,3 +1,7 @@
+# Flask is a really nice framework
+# Author:
+# Date : Oct 2, 2019
+
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
